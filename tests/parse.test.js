@@ -51,3 +51,21 @@ test('Parsing RGB String values', t => {
 
   t.end()
 })
+
+test('Parsing HSL String values', t => {
+
+  const values = {
+    'hsl(12, 45,      67)': { h: 12, s: 45, l: 67 },
+    'hsl(120,125,167)': { h: 120, s: 125, l: 167 },
+  }
+
+
+
+  Object.keys(values).forEach((key, i) => {
+    console.log(hc.parse(key));
+
+    // t.deepEqual(hc.parse(key), values[key], `parse(${JSON.stringify(key)}) returns ${JSON.stringify(values[key])}`)
+  })
+
+  t.end()
+})
