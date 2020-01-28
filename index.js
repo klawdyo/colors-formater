@@ -20,6 +20,8 @@
  * color.toHex()
  * color.toHSL()
  * color.toRGB()
+ * color.toRGBString()
+ * color.toHSLString()
  * 
  * // Verifications
  * color.isHex()

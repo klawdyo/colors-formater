@@ -1,7 +1,35 @@
+
 /**
+ * Pega qualquer tipo de cor e converte para o seu equivalente em 
+ * objeto RGB, no formato { r:12, g:23, b:45 }
  *
+ * @tests
+ *  
+ *  // Cores hexadecimais válidas 
+ *  √ parse(123) returns { r: 17, g: 34, b: 51 }
+ *  √ parse(#123) returns { r: 17, g: 34, b: 51 }
+ *  √ parse(112233) returns { r: 17, g: 34, b: 51 }
+ *  √ parse(#112233) returns { r: 17, g: 34, b: 51 }
+ *  √ parse("abc") returns { r: 170, g: 187, b: 204 }
+ *  √ parse("#abc") returns { r: 170, g: 187, b: 204 }
+ *  √ parse("ABC") returns { r: 170, g: 187, b: 204 }
+ *  √ parse("#ABC") returns { r: 170, g: 187, b: 204 }
+ * 
+ *  // Não é uma cor hexadecimal válida
+ *  √ parse(#CLA) returns null
+ * 
+ *  // Cores já em formato RGB retornam o mesmo valor
+ *  √ parse({"r":12,"g":45,"b":67}) returns same value
+ *  √ parse({"r":120,"g":125,"b":167}) returns same value
  *
- * @param {*} color
+ *  // Cores no formato RGB String
+ *  √ parse("rgb(12, 45, 67)") returns {"r":12,"g":45,"b":67}
+ *  √ parse("rgb(120,125,167)") returns {"r":120,"g":125,"b":167}
+ * 
+ *  // Cores no formato HSL object
+ *
+ * @param {String} color: Cor em formato
+ * @return
  */
 const parse = function (color) {
   // is rgb object
@@ -16,7 +44,7 @@ const parse = function (color) {
 
   // is hsl string
   else if (isHSLString(color)) {
-    return hslToRgb(convertToHSLSObject(color));
+    return hslToRgb(convertToHSLObject(color));
   }
   // 
   else if (isHSLObject(color)) {
@@ -33,43 +61,67 @@ const parse = function (color) {
 /**
  *
  *
- * @param {*} color
+ * @example
+ *
+ *
+ * @param {String} color: Cor em formato
+ * @return
  */
 const isRGBObject = function (color) {
   return typeof color === 'object' && Object.keys(color).every(item => ['r', 'g', 'b'].includes(item))
 }
 
+
 /**
  *
  *
- * @param {*} color
+ * @example
+ *
+ *
+ * @param {String} color: Cor em formato
+ * @return
  */
 const isRGBString = function (color) {
   return !!convertToRGBSObject(color)
 }
 
+
 /**
  *
  *
- * @param {*} color
+ * @example
+ *
+ *
+ * @param {String} color: Cor em formato
+ * @return
  */
 const isHSLObject = function (color) {
   return typeof color === 'object' && Object.keys(color).every(item => ['h', 's', 'l'].includes(item))
 }
 
+
 /**
  *
  *
- * @param {*} color
+ * @example
+ *
+ *
+ * @param {String} color: Cor em formato
+ * @return
  */
 const isHSLString = function (color) {
   return !!convertToHSLObject(color)
 }
 
+
 /**
  *
  *
- * @param {*} color
+ * @example
+ *
+ *
+ * @param {String} color: Cor em formato
+ * @return
  */
 const isHexadecimal = function (color) {
   return /^([#])?(([0-9a-fA-F]{3})|([0-9a-fA-F]{6}))$/.test(color)
@@ -97,18 +149,40 @@ const convertToRGBSObject = function (color) {
 }
 
 /**
+ * @validation
+ * hue = 0 - 360
+ * saturation = 0% - 100% (0% = shades of grey/ 100% = full color)
+ * lightness = 0% - 100% (0% = black/ 100% = white)
+ *
+ * @tests
+ *
+ *    Convert HSL string to HSL object
+ *
+ *      √ Convert hsl(34, 56%, 10%) to {"h":34,"s":"56%","l":"10%"}
+ *      √ Convert hsl(46, 96%, 0%) to {"h":46,"s":"96%","l":"0%"}
+ *
+ *    Try convert an INVALID HSL string to HSL object
+ *
+ *      √ Hue bigger than 360
+ *      √ Hue lower than 0
+ *      √ Saturation bigger than 360
+ *      √ Light bigger than 360
  *
  *
- * @param {*} color
+ * @param {String} color: Cor em formato
+ * @return
  */
 const convertToHSLObject = function (color) {
-  const rgx = /^hsl?\((?<h>\d+),\s*(?<s>\d+),\s*(?<l>\d+)\)$/
+  const rgx = /^hsl\((?<h>\d+),\s*(?<s>(?<sInt>\d+)\%),\s*(?<l>(?<lInt>\d+)\%)\)$/
   const match = rgx.exec(color)
 
   if (match && match.groups) {
-    const { h, s, l } = match.groups
+    const { h, s, l, sInt, lInt } = match.groups
+    // console.log('Result', h, s, l, sInt, lInt)
 
-    return { h: parseInt(h), s: parseInt(s), l: parseInt(l) }
+    if (h < 0 || h > 360 || sInt < 0 || sInt > 100 || lInt < 0 || lInt > 100) return null
+
+    return { h: parseInt(h), s, l }
   }
 
   return null;
@@ -184,6 +258,15 @@ const rgbToHsl = function ({ r, g, b }) {
   return { h, s, l };
 }
 
+/**
+ *
+ *
+ * @example
+ *
+ *
+ * @param {String} color: Cor em formato
+ * @return
+ */
 const hexToRgb = function (color) {
   color = normalizeHex(color).substr(1, 6);
   // parseInt(hex, 16)
