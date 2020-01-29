@@ -68,7 +68,14 @@ const parse = function (color) {
  * @return
  */
 const isRGBObject = function (color) {
-  return typeof color === 'object' && Object.keys(color).every(item => ['r', 'g', 'b'].includes(item))
+  return typeof color === 'object'
+    && Object.keys(color).every(item => ['r', 'g', 'b'].includes(item))
+    && color.r >= 0 && color.r <= 255
+    && color.g >= 0 && color.g <= 255
+    && color.b >= 0 && color.b <= 255
+
+
+
 }
 
 

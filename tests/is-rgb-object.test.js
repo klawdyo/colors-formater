@@ -1,21 +1,23 @@
 const test = require('tape')
 const { isRGBObject } = require('../HandleColors')
 
-
 test('Is RGB Object', t => {
-
   t.deepEqual(isRGBObject({ r: 244, g: 23, b: 0 }), true, 'isRGBObject({r:244, g:23, b:0}) = true')
-
   t.end()
 })
 
-test('Try convert an INVALID HSL string to HSL object ', t => {
+test('Is NOT a RGB Object', t => {
+  const tests = [
+    { r: 244, g: 23, ba: 0 },
+    { r: 260, g: 23, b: 0 },
+    { r: 244, g: 260, b: 0 },
+    { r: 244, g: 23, b: 260 },
+  ]
 
-  t.notOk(hc.convertToHSLObject('hsl(361,0%,0%)'), 'Hue bigger than 360')
-  t.notOk(hc.convertToHSLObject('hsl(-5,0%,0%)'), 'Hue lower than 0')
+  tests.forEach(test => {
+    t.notOk(isRGBObject(test), `${JSON.stringify(test)} is not a valid rgb object`)
+  })
 
-  t.notOk(hc.convertToHSLObject('hsl(36,120%,0%)'), 'Saturation bigger than 360')
-  t.notOk(hc.convertToHSLObject('hsl(36,10%,120%)'), 'Light bigger than 360')
 
   t.end()
 })
