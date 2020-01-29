@@ -29,7 +29,7 @@
  *  // Cores no formato HSL object
  *
  * @param {String} color: Cor em formato
- * @return
+ * @return {Object} RGB object if a valid color or null
  */
 const parse = function (color) {
   // is rgb object
@@ -39,12 +39,12 @@ const parse = function (color) {
 
   // is rgb string
   else if (isRGBString(color)) {
-    return convertToRGBSObject(color);
+    return convertRGBStringToObject(color);
   }
 
   // is hsl string
   else if (isHSLString(color)) {
-    return hslToRgb(convertToHSLObject(color));
+    return hslToRgb(convertHSLStringToObject(color));
   }
   // 
   else if (isHSLObject(color)) {
@@ -58,14 +58,33 @@ const parse = function (color) {
   return null;
 }
 
+// //////////////////////////////////////////////////////////////////////////
+//
+//  VALIDATIONS
+//
+// //////////////////////////////////////////////////////////////////////////
+
+
 /**
+ * Verify if a specified param is a RGB color object
  *
+ * @tests
  *
- * @example
+ *    Is RGB Object
+ *
+ *      √ isRGBObject({r:244, g:23, b:0}) = true
+ *
+ *    Is NOT a RGB Object
+ *
+ *      √ {"r":244,"g":23,"ba":0} is not a valid rgb object
+ *      √ {"r":260,"g":23,"b":0} is not a valid rgb object
+ *      √ {"r":244,"g":260,"b":0} is not a valid rgb object
+ *      √ {"r":244,"g":23,"b":260} is not a valid rgb object
+ * 
  *
  *
  * @param {String} color: Cor em formato
- * @return
+ * @return {Boolean}
  */
 const isRGBObject = function (color) {
   return typeof color === 'object'
@@ -73,59 +92,133 @@ const isRGBObject = function (color) {
     && color.r >= 0 && color.r <= 255
     && color.g >= 0 && color.g <= 255
     && color.b >= 0 && color.b <= 255
-
-
-
 }
 
-
 /**
- *
- *
+ * Verify if the specified param color is a valida RGB string color in format:
+ *  rgb(255, 255, 255)
+ * 
  * @example
+ * isRGBString('rgb(12, 34, 57)')
+ *
+ * @tests
+ *
+ * Is a RGB String Color
+ *
+ *   √ isRGBString(rgb(12, 34, 57)) returns true.
+ *   √ isRGBString(rgb(260, 34, 57)) returns false. "R" component cannot be bigger than 255
+ *   √ isRGBString(rgb(12, 260, 57)) returns false. "G" component cannot be bigger than 255
+ *   √ isRGBString(rgb(12, 34, 260)) returns false. "B" component cannot be bigger than 255 
  *
  *
  * @param {String} color: Cor em formato
- * @return
+ * @return {Boolean}
  */
 const isRGBString = function (color) {
-  return !!convertToRGBSObject(color)
+  rgb = convertRGBStringToObject(color);
+  return !!rgb && isRGBObject(rgb)
 }
 
 
 /**
- *
- *
+ * Validates a HSL object specified in param
+ * 
  * @example
+ * isHSLObject( { h:12, s:'0%', l:'20%' } )
+ * 
+ * @tests
+ *
+ * Is a HSL Object Color
+ *
+ *  √ isHSLObject({"h":12,"s":"0%","l":"20%"}) returns true.
+ *  √ isHSLObject({"h":460,"s":"34%","l":"57%"}) returns false. "Hue" component cannot be bigger than 360
+ *  √ isHSLObject({"h":12,"s":"260%","l":"57%"}) returns false. "Saturation" component cannot be bigger than 100%
+ *  √ isHSLObject({"h":12,"s":"34%","l":"260%"}) returns false. "Light" component cannot be bigger than 100%
+ *  √ isHSLObject({"h":12,"s":"34%","l":"80"}) returns false. "Saturation" component is not in percent format
+ *  √ isHSLObject({"h":12,"s":"34","l":"80%"}) returns false. "Light" component is not in percent format
  *
  *
- * @param {String} color: Cor em formato
- * @return
+ * @param {String} color: Cor em formato HSL Object
+ * @return {Boolean}
  */
 const isHSLObject = function (color) {
-  return typeof color === 'object' && Object.keys(color).every(item => ['h', 's', 'l'].includes(item))
+  const validate = component => {
+    const rgx = /(?<component>[0-9]+)\%/
+    const match = rgx.exec(component);
+    if (match && match.groups) {
+      return parseInt(match.groups.component) >= 0 && parseInt(match.groups.component) <= 100
+    }
+
+    return false;
+  }
+
+  return typeof color === 'object'
+    && Object.keys(color).every(item => ['h', 's', 'l'].includes(item))
+    && color.h >= 0 && color.h <= 360
+    && validate(color.s)
+    && validate(color.l)
 }
 
 
 /**
- *
+ * Validates if a specified param is a HSL string color
  *
  * @example
+ * isHSLString('hsl(12, 90%, 50%)')
+ * 
+ * @tests
+ *
+ *  Is a HSL String Color
+ *
+ *    √ isHSLString(hsl(12, 0%, 20%)) returns true.
+ *    √ isHSLString(hsl(460, 34%, 57%)) returns false. "Hue" component cannot be bigger than 360
+ *    √ isHSLString(hsl(12, 260%, 57%)) returns false. "Saturation" component cannot be bigger than 100%
+ *    √ isHSLString(hsl(12, 34%, 120%)) returns false. "Light" component cannot be bigger than 100%
+ *    √ isHSLString(hsl(12, 34%, 80)) returns false. "Saturation" component is not in percent format
+ *    √ isHSLString(hsl(12, 34, 80%)) returns false. "Light" component is not in percent format
+ *
+ *    total:     6
+ *    passing:   6
+ *    duration:  16ms
+ * 
  *
  *
  * @param {String} color: Cor em formato
- * @return
+ * @return {Boolean}
  */
 const isHSLString = function (color) {
-  return !!convertToHSLObject(color)
+  const hsl = convertHSLStringToObject(color);
+  return !!hsl && isHSLObject(hsl)
 }
 
 
 /**
- *
+ * Validates if the specified param is a hexadecimal color
  *
  * @example
+ * isHexadecimal('#FFF')
+ * 
+ * @tests
  *
+ *  Is a VALID Hexadecimal Color
+ * 
+ *    √ isHexadecimal(123) returns true
+ *    √ isHexadecimal(#123) returns true
+ *    √ isHexadecimal(#123345) returns true
+ *    √ isHexadecimal(123567) returns true
+ *    √ isHexadecimal(#abc) returns true
+ *    √ isHexadecimal(abc) returns true
+ * 
+ *  Is a INVALID Hexadecimal Color
+ * 
+ *    √ "#1232" is not a valid hexadecimal color. Returns false
+ *    √ "#cla" is not a valid hexadecimal color. Returns false
+ *    √ "cla" is not a valid hexadecimal color. Returns false
+ * 
+ * 
+ *   total:     9
+ *   passing:   9
+ *   duration:  19ms
  *
  * @param {String} color: Cor em formato
  * @return
@@ -134,33 +227,100 @@ const isHexadecimal = function (color) {
   return /^([#])?(([0-9a-fA-F]{3})|([0-9a-fA-F]{6}))$/.test(color)
 }
 
+// //////////////////////////////////////////////////////////////////////////
+//
+//  CONVERSIONS
+//
+// //////////////////////////////////////////////////////////////////////////
+
 /**
- * Convert a string in format:
- * rgb(12, 45, 67)
- * to an object in format:
- * { r: 12, g: 45, b: 67 }
+ * Convert a string in format  rgb(12, 45, 67) to an object in format: { r: 12, g: 45, b: 67 }
+ * 
+ * @example
+ *  convertRGBStringToObject('rgb(12, 45, 67)')
+ * 
+ * @tests
+ *
+ *  Convert RGB String to Object
+ *
+ *    √ convertRGBStringToObject("rgb(12, 45, 67)") returns {"r":12,"g":45,"b":67}.
+ *    √ convertRGBStringToObject("rgb(260, 45, 67)") returns null. "Red" component cannot be bigger than 255
+ *    √ convertRGBStringToObject("rgb(12, 260, 67)") returns null. "Green" component cannot be bigger than 255
+ *    √ convertRGBStringToObject("rgb(12, 45, 260)") returns null. "Blue" component cannot be bigger than 255
+ *
+ *
+ *  total:     4
+ *  passing:   4
+ *  duration:  17ms
+ * 
  * 
  * @param {*} color 
  */
-const convertToRGBSObject = function (color) {
+const convertRGBStringToObject = function (color) {
+
   const rgx = /^rgba?\((?<r>\d+),\s*(?<g>\d+),\s*(?<b>\d+)(?:,\s*(?<a>\d*(?:\.\d+)?))?\)$/
   const match = rgx.exec(color)
 
   if (match && match.groups) {
     const { r, g, b } = match.groups
 
-    return { r: parseInt(r), g: parseInt(g), b: parseInt(b) }
+    const rgb = { r: parseInt(r), g: parseInt(g), b: parseInt(b) }
+
+    if (isRGBObject(rgb)) {
+      return rgb
+    }
+    else return null
   }
+
 
   return null;
 }
 
 /**
+ * Converts a RGB Object format to a String Format
+ * 
+ * @example
+ *  convertRGBObjectToString( { h:23, s: '50%', l: '50%' } )
+ * 
+ * @tests
+ *
+ *    Try to Convert RGB Object to String
+ *
+ *      √ convertRGBObjectToString({"r":240,"g":240,"b":240}) returns "rgb(240, 240, 240)".
+ *      √ convertRGBObjectToString({"r":260,"g":240,"b":240}) returns null. "Reg" component cannot be bigger than 255
+ *      √ convertRGBObjectToString({"r":240,"g":260,"b":240}) returns null. "Green" component cannot be bigger than 255
+ *      √ convertRGBObjectToString({"r":240,"g":240,"b":260}) returns null. "Blue" component cannot be bigger than 255
+ *
+ *
+ *    total:     4
+ *    passing:   4
+ *    duration:  20ms
+ * 
+ * 
+ * 
+ * @param {Object} color
+ * @returns {String} in format rgb(23, 45, 67) or null if invalid rgb color object
+ */
+const convertRGBObjectToString = function (color) {
+  if (isRGBObject(color)) {
+    return `rgb(${color.g}, ${color.g}, ${color.b})`
+  }
+
+  return null;
+}
+
+
+/**
+ * Convert a string in format hsl(24, 50%, 50%) in format {h:24, s: '50%', l:'50%'}
+ * 
  * @validation
  * hue = 0 - 360
  * saturation = 0% - 100% (0% = shades of grey/ 100% = full color)
  * lightness = 0% - 100% (0% = black/ 100% = white)
- *
+ *  
+ * @example
+ *  convertHSLStringToObject('hsl(24, 50%, 50%)')
+ * 
  * @tests
  *
  *    Convert HSL string to HSL object
@@ -176,10 +336,15 @@ const convertToRGBSObject = function (color) {
  *      √ Light bigger than 360
  *
  *
+ *    total:     6
+ *    passing:   6
+ *    duration:  21ms
+ *
+ *
  * @param {String} color: Cor em formato
  * @return
  */
-const convertToHSLObject = function (color) {
+const convertHSLStringToObject = function (color) {
   const rgx = /^hsl\((?<h>\d+),\s*(?<s>(?<sInt>\d+)\%),\s*(?<l>(?<lInt>\d+)\%)\)$/
   const match = rgx.exec(color)
 
@@ -190,6 +355,39 @@ const convertToHSLObject = function (color) {
     if (h < 0 || h > 360 || sInt < 0 || sInt > 100 || lInt < 0 || lInt > 100) return null
 
     return { h: parseInt(h), s, l }
+  }
+
+  return null;
+}
+
+/**
+ * Converts a HSL Object format to a String Format
+ * 
+ * @example
+ *  convertHSLObjectToString( { h:23, s: '50%', l: '50%' } )
+ * 
+ * @tests
+ *
+ *  Try convert a HSL Object to String
+ *
+ *    √ convertHSLObjectToString({"h":12,"s":"0%","l":"20%"}) returns "hsl(12, 0%, 20%)".
+ *    √ convertHSLObjectToString({"h":460,"s":"34%","l":"57%"}) returns null. "Hue" component cannot be bigger than 360
+ *    √ convertHSLObjectToString({"h":12,"s":"260%","l":"57%"}) returns null. "Saturation" component cannot be bigger than 100%
+ *    √ convertHSLObjectToString({"h":12,"s":"34%","l":"260%"}) returns null. "Light" component cannot be bigger than 100%
+ *    √ convertHSLObjectToString({"h":12,"s":"34%","l":"80"}) returns null. "Saturation" component is not in percent format
+ *    √ convertHSLObjectToString({"h":12,"s":"34","l":"80%"}) returns null. "Light" component is not in percent format
+ *
+ *
+ *  total:     6
+ *  passing:   6
+ *  duration:  20ms 
+ * 
+ * @param {Object} color
+ * @returns {String} in format hsl(23, 50%, 50%) or null if invalid hsl color object
+ */
+const convertHSLObjectToString = function (color) {
+  if (isHSLObject(color)) {
+    return `hsl(${color.h}, ${color.s}, ${color.l})`
   }
 
   return null;
@@ -308,22 +506,41 @@ const rgbToHex = function (color) {
 
 
 
+
+
 /**
  * Normalizes a hexadecimal color
  * 
- * normalizeHex('123')      // #112233
- * normalizeHex('#123')     // #112233
- * normalizeHex('#1232')    // throws an error (#1232 is an invalid color)
- * normalizeHex('#123345')  // #123345
- * normalizeHex('123567')   // #123567
- * normalizeHex('#abc')     // #AABBCC
- * normalizeHex('abc')      // #AABBCC
- * normalizeHex('#cla')     // throws an error (#cla is an invalid color)
- * normalizeHex('cla')      // throws an error (cla is an invalid color)
+ * @tests
+ *
+ *  Normalize Hexadecimal Color
+ *
+ *    √ normalizeHex(123) returns #112233
+ *    √ normalizeHex(#123) returns #112233
+ *    √ normalizeHex(#123345) returns #123345
+ *    √ normalizeHex(123567) returns #123567
+ *    √ normalizeHex(#abc) returns #AABBCC
+ *    √ normalizeHex(abc) returns #AABBCC
+ *    √ "#1232" is not a valid hexadecimal color. Returns null
+ *    √ "#cla" is not a valid hexadecimal color. Returns null
+ *    √ "cla" is not a valid hexadecimal color. Returns null
+ *
+ * @example
+ *    normalizeHex('123')      // #112233
+ *    normalizeHex('#123')     // #112233
+ *    normalizeHex('#123345')  // #123345
+ *    normalizeHex('123567')   // #123567
+ *    normalizeHex('#abc')     // #AABBCC
+ *    normalizeHex('abc')      // #AABBCC
+ *    normalizeHex('#1232')    // null
+ *    normalizeHex('#cla')     // null
+ *    normalizeHex('cla')      // null
+ * 
+ * @param {String} strHexColor: Hexadecimal color
  */
-const normalizeHex = function (str) {
-  str = String(str).toUpperCase();
-  const match = /^(?<hash>[#])?(?:(?<six>[0-9A-F]{6})|(?<three>[0-9A-F]{3}))?$/.exec(str);
+const normalizeHex = function (strHexColor) {
+  strHexColor = String(strHexColor).toUpperCase();
+  const match = /^(?<hash>[#])?(?:(?<six>[0-9A-F]{6})|(?<three>[0-9A-F]{3}))?$/.exec(strHexColor);
   if (match && match.groups) {
     const { three, six } = match.groups
 
@@ -331,7 +548,7 @@ const normalizeHex = function (str) {
     return `#${six}`;
   }
 
-  throw new Error(`${str} is an Invalid Color`)
+  return null
 }
 
 module.exports = {
@@ -341,8 +558,10 @@ module.exports = {
   isHSLObject,
   isHSLString,
   isHexadecimal,
-  convertToRGBSObject,
-  convertToHSLObject,
+  convertRGBStringToObject,
+  convertRGBObjectToString,
+  convertHSLStringToObject,
+  convertHSLObjectToString,
   hslToRgb,
   rgbToHsl,
   hexToRgb,

@@ -1,6 +1,13 @@
 {
+  "description": "A project to handle colors in javascript",
+  "license": "MIT",
+  "author": {
+    "email": "klawdyo@gmail.com",
+    "name": "Cláudio Medeiros",
+    "url": "https://github.com/klawdyo/colors.js"
+  },
   "scripts": {
-    "test": "cls && node tests/index.test | tap-spec"
+    "test": "cls && node tests/_.test | tap-spec"
   },
   "devDependencies": {
     "tap-spec": "^5.0.0",
