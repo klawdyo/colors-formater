@@ -350,7 +350,6 @@ const convertHSLStringToObject = function (color) {
 
   if (match && match.groups) {
     const { h, s, l, sInt, lInt } = match.groups
-    // console.log('Result', h, s, l, sInt, lInt)
 
     if (h < 0 || h > 360 || sInt < 0 || sInt > 100 || lInt < 0 || lInt > 100) return null
 
@@ -680,6 +679,116 @@ const lighten = function (color, step) {
 }
 
 /**
+ * Verify if a specified param is a dark color
+ *
+ * @example
+ *  isDark('#DCF')
+ *  isDark({r: 23, g: 45, b: 67})
+ *  isDark('rgb(12, 65, 87)')
+ * 
+ * @tests
+ *
+ *  Is a Dark Color
+ *
+ *    √ isDark("#FFF") returns false.
+ *    √ isDark("#000") returns true.
+ *
+ *
+ *  total:     2
+ *  passing:   2
+ *  duration:  28ms
+ * 
+ * 
+ * @param {String, Object} color: Any supported format by parse()
+ * @returns {Boolean}
+ */
+const isDark = function (color) {
+
+  const rgb = parse(color);
+  if (rgb) {
+    const { r, g, b } = rgb;
+
+    // HSP (Highly Sensitive Poo) equation from http://alienryderflex.com/hsp.html
+    const hsp = Math.sqrt(
+      0.299 * (r * r) +
+      0.587 * (g * g) +
+      0.114 * (b * b)
+    );
+
+    // Using the HSP value, determine whether the color is light or dark
+    return hsp < 127.5;
+  }
+
+  return false;
+}
+
+/**
+ * Verify if a specified param is a light color
+ * 
+ * @example
+ *  isLight('#DCF')
+ *  isLight({r: 23, g: 45, b: 67})
+ *  isLight('rgb(12, 65, 87)')
+ *
+ * @tests
+ *
+ *  Is a Light Color
+ *
+ *    √ isLight("#FFF") returns true.
+ *    √ isLight("#000") returns false.
+ *
+ *
+ *  total:     2
+ *  passing:   2
+ *  duration:  19ms
+ * 
+ * 
+ * @param {String, Object} color: Any supported format by parse()
+ * @returns {Object} RGB Color object
+ */
+const isLight = function (color) {
+  return !isDark(color)
+}
+
+
+/**
+ * Verify if a specified param is a valid color in anu format supperted by parse()
+ * 
+ * @example
+ *  isValid('#DCF')
+ *  isValid({r: 23, g: 45, b: 67})
+ *  isValid('rgb(12, 65, 87)')
+ *
+ * @tests
+ *
+ *    Is a Valid Color
+ *
+ *      √ isValid("#FFF") returns true.
+ *      √ isValid("#000") returns true.
+ *
+ *    Is a INVALID Color
+ *
+ *      √ isValid("#kla") returns false.
+ *      √ isValid({"r":244,"g":43}) returns false.
+ *      √ isValid({"h":244,"s":"43%","l":12}) returns false.
+ *
+ *
+ *    total:     5
+ *    passing:   5
+ *    duration:  28ms
+ * 
+ * 
+ * @param {String, Object} color: Any supported format by parse()
+ * @returns {Object} RGB Color object
+ */
+const isValid = function (color) {
+  return !!parse(color);
+}
+
+
+
+
+/**
  * Invert a specified color
  * 
  * @example
@@ -739,5 +848,9 @@ module.exports = {
 
   darken,
   lighten,
-  invert
+  invert,
+
+  isLight,
+  isDark,
+  isValid
 }
