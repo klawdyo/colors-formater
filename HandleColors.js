@@ -467,19 +467,42 @@ const rgbToHsl = function ({ r, g, b }) {
  *
  *
  * @example
+ * 
+ * 
+ * @tests
+ *
+ *  Try convert Hexadecimal Color to RGB
+ *
+ *    √ hexToRgb(123) returns {"r":17,"g":34,"b":51}
+ *    √ hexToRgb(#123) returns {"r":17,"g":34,"b":51}
+ *    √ hexToRgb(112233) returns {"r":17,"g":34,"b":51}
+ *    √ hexToRgb(#112233) returns {"r":17,"g":34,"b":51}
+ *    √ hexToRgb(abc) returns {"r":170,"g":187,"b":204}
+ *    √ hexToRgb(#abc) returns {"r":170,"g":187,"b":204}
+ *
+ *
+ *  total:     6
+ *  passing:   6
+ *  duration:  18ms
+ * 
  *
  *
  * @param {String} color: Cor em formato
  * @return
  */
 const hexToRgb = function (color) {
-  color = normalizeHex(color).substr(1, 6);
-  // parseInt(hex, 16)
-  return {
-    r: parseInt(color.substr(0, 2), 16),
-    g: parseInt(color.substr(2, 2), 16),
-    b: parseInt(color.substr(4, 2), 16),
+  if (isHexadecimal(color)) {
+
+    color = normalizeHex(color).substr(1, 6);
+    // parseInt(hex, 16)
+    return {
+      r: parseInt(color.substr(0, 2), 16),
+      g: parseInt(color.substr(2, 2), 16),
+      b: parseInt(color.substr(4, 2), 16),
+    }
   }
+
+  return null
 }
 
 /**
@@ -493,7 +516,7 @@ const hexToRgb = function (color) {
  */
 const rgbToHex = function (color) {
   if (isRGBObject(color)) {
-    const { r, g, b } = color;
+    let { r, g, b } = color;
     r = (r).toString(16)
     g = (g).toString(16)
     b = (b).toString(16)
@@ -551,6 +574,152 @@ const normalizeHex = function (strHexColor) {
   return null
 }
 
+/**
+ * Darken a specified color
+ * 
+ * @example
+ *  darken('#DCF', 0.2)
+ *  darken({r: 23, g: 45, b: 67}, 0.25)
+ *  darken('rgb(12, 65, 87)', 0.4)
+ * 
+ * @tests
+ *
+ *    Darkening colors
+ *
+ *      √ { r: 10, g: 10, b: 10 } darkened in 10%
+ *      √ { r: 0, g: 10, b: 10 } darkened in 10%
+ *      √ rgb(0, 10,10) darkened in 10%
+ *      √ #000A0A darkened in 10%
+ *
+ *
+ *    total:     4
+ *    passing:   4
+ *    duration:  17ms
+ *
+ * 
+ * 
+ * 
+ * @param {String, Object} color: Any supported format by parse()
+ * @param {Float}: Number between 0 and 1 to darken color
+ * @returns {Object} RGB Color object
+ */
+const darken = function (color, step) {
+  const rgb = parse(color);
+
+  if (rgb) {
+
+    const darkenComponent = (component, step) => {
+      component -= component * step;
+      if (component < 0) return 0
+      else if (component > 255) return 255
+      else return parseInt(component)
+    }
+
+
+    return {
+      r: darkenComponent(rgb.r, step),
+      g: darkenComponent(rgb.g, step),
+      b: darkenComponent(rgb.b, step)
+    }
+  }
+
+  return null
+}
+
+/**
+ * Lighten a specified color
+ * 
+ * @example
+ *  lighten('#DCF', 0.2)
+ *  lighten({r: 23, g: 45, b: 67}, 0.25)
+ *  lighten('rgb(12, 65, 87)', 0.4)
+ * 
+ * @tests
+ *
+ *
+ *    Lighting up colors
+ *
+ *      √ { r: 10, g: 10, b: 10 } illuminated in 10%
+ *      √ { r: 255, g: 10, b: 10 } illuminated in 10%
+ *      √ rgb(255, 10,10) illuminated in 10%
+ *      √ #FF0A0A illuminated in 10%
+ *
+ *
+ *    total:     4
+ *    passing:   4
+ *    duration:  17ms
+ *
+ * 
+ * 
+ * 
+ * @param {String, Object} color: Any supported format by parse()
+ * @param {Float}: Number between 0 and 1 to darken color
+ * @returns {Object} RGB Color object
+ */
+const lighten = function (color, step) {
+  const rgb = parse(color);
+
+  if (rgb) {
+
+    const lightenComponent = (component, step) => {
+      component += component * step;
+      if (component < 0) return 0
+      else if (component > 255) return 255
+      else return parseInt(component)
+    }
+
+
+    return {
+      r: lightenComponent(rgb.r, step),
+      g: lightenComponent(rgb.g, step),
+      b: lightenComponent(rgb.b, step)
+    }
+  }
+
+  return null
+}
+
+/**
+ * Invert a specified color
+ * 
+ * @example
+ *  invert('#DCF')
+ *  invert({r: 23, g: 45, b: 67})
+ *  invert('rgb(12, 65, 87)')
+ * 
+ * @tests
+ *
+ *  Inverting colors
+ *
+ *    √ { r: 10, g: 10, b: 10 } inverted
+ *    √ { r: 255, g: 10, b: 10 } inverted
+ *    √ rgb(255, 10,10) inverted
+ *    √ #FF0A0A inverted
+ * 
+ * @param {String, Object} color: Any supported format by parse()
+ * @returns {Object} RGB Color object
+ */
+const invert = function (color, step) {
+  const rgb = parse(color);
+
+  if (rgb) {
+
+    const invertComponent = (component) => {
+      component -= 255
+      return parseInt(component < 0 ? component * (-1) : component)
+    }
+
+
+    return {
+      r: invertComponent(rgb.r),
+      g: invertComponent(rgb.g),
+      b: invertComponent(rgb.b)
+    }
+  }
+
+  return null
+}
+
 module.exports = {
   parse,
   isRGBObject,
@@ -562,9 +731,13 @@ module.exports = {
   convertRGBObjectToString,
   convertHSLStringToObject,
   convertHSLObjectToString,
-  hslToRgb,
-  rgbToHsl,
+  // hslToRgb,
+  // rgbToHsl,
   hexToRgb,
   rgbToHex,
   normalizeHex,
+
+  darken,
+  lighten,
+  invert
 }
