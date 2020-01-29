@@ -22,6 +22,11 @@ require('./hex-to-rgb.test')                           // OK
 require('./normalize-hex.test')                        // OK
 
 
+require('./invert.test')                               // OK
+
 require('./darken.test')                               // OK
 require('./lighten.test')                              // OK
-require('./invert.test')                               // OK
+
+require('./is-light.test')                              // OK
+require('./is-dark.test')                               // OK
+require('./is-valid.test')                              // OK
