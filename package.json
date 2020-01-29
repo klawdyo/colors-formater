@@ -1,12 +1,18 @@
 {
   "name": "colors-formater",
   "description": "A project to handle colors in javascript",
-  "license": "MIT",
-  "author": {
-    "email": "klawdyo@gmail.com",
-    "name": "Cláudio Medeiros",
-    "url": "https://github.com/klawdyo/colors-formater"
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klawdyo/colors-formater.git"
   },
+  "author": "Cláudio Medeiros (klawdyo)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/klawdyo/colors/issues"
+  },
+  "homepage": "https://github.com/klawdyo/colors#readme",
   "scripts": {
     "test": "cls && node tests/_.test | tap-spec"
   },
