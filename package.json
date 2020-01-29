@@ -1,10 +1,11 @@
 {
+  "name": "colors-formater",
   "description": "A project to handle colors in javascript",
   "license": "MIT",
   "author": {
     "email": "klawdyo@gmail.com",
     "name": "Cláudio Medeiros",
-    "url": "https://github.com/klawdyo/colors.js"
+    "url": "https://github.com/klawdyo/colors-formater"
   },
   "scripts": {
     "test": "cls && node tests/_.test | tap-spec"
