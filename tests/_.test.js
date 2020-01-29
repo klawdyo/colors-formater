@@ -30,3 +30,7 @@ require('./lighten.test')                              // OK
 require('./is-light.test')                              // OK
 require('./is-dark.test')                               // OK
 require('./is-valid.test')                              // OK
+
+
+
+//*/

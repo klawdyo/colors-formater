@@ -74,6 +74,18 @@ function Colors(color) {
       return this;
     },
 
+    isLight() {
+      return HandleColors.isLight(RGB);
+    },
+
+    isDark() {
+      return HandleColors.isDark(RGB);
+    },
+
+    isValid() {
+      return HandleColors.isValid(RGB);
+    },
+
 
 
 
