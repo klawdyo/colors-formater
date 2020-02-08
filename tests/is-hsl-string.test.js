@@ -1,5 +1,5 @@
 const test = require('tape')
-const { isHSLString } = require('../HandleColors')
+const { isHSLString } = require('../dist/HandleColors')
 
 test('Is a HSL String Color', t => {
 

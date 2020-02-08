@@ -1,5 +1,5 @@
 const test = require('tape')
-const { normalizeHex } = require('../HandleColors')
+const { normalizeHex } = require('../dist/HandleColors')
 
 test('Normalize Hexadecimal Color', t => {
 

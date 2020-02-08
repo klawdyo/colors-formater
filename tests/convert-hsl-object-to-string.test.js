@@ -1,5 +1,5 @@
 const test = require('tape')
-const { convertHSLObjectToString } = require('../HandleColors')
+const { convertHSLObjectToString } = require('../dist/HandleColors')
 
 test('Try convert a HSL Object to String', t => {
 

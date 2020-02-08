@@ -1,3 +1,5 @@
+"use strict";
+
 /**
  * 
  * @example
@@ -37,64 +39,42 @@
  * Colors(#A34).lighten(.35).toRGB()
  * Colors(#A34).inverted().toHSL()
  */
-
-const HandleColors = require('./HandleColors')
+var HandleColors = require('./dist/HandleColors');
 
 function Colors(color) {
-
-  let RGB = HandleColors.parse(color);
-
+  var RGB = HandleColors.parse(color);
   return {
-
-
-    toHex() {
+    toHex: function toHex() {
       return HandleColors.rgbToHex(RGB);
     },
-
-    toRGB() {
-      return RGB
+    toRGB: function toRGB() {
+      return RGB;
     },
-
-    toRGBString() {
-      return HandleColors.convertRGBObjectToString(RGB)
+    toRGBString: function toRGBString() {
+      return HandleColors.convertRGBObjectToString(RGB);
     },
-
-    darken(step) {
-      RGB = HandleColors.darken(RGB, step)
+    darken: function darken(step) {
+      RGB = HandleColors.darken(RGB, step);
       return this;
     },
-
-    lighten(step) {
-      RGB = HandleColors.lighten(RGB, step)
+    lighten: function lighten(step) {
+      RGB = HandleColors.lighten(RGB, step);
       return this;
     },
-
-    invert() {
-      RGB = HandleColors.invert(RGB)
+    invert: function invert() {
+      RGB = HandleColors.invert(RGB);
       return this;
     },
-
-    isLight() {
+    isLight: function isLight() {
       return HandleColors.isLight(RGB);
     },
-
-    isDark() {
+    isDark: function isDark() {
       return HandleColors.isDark(RGB);
     },
-
-    isValid() {
+    isValid: function isValid() {
       return HandleColors.isValid(RGB);
-    },
-
-
-
-
-
-
-
-
-  }
-
+    }
+  };
 }
 
 module.exports = Colors;

@@ -1,5 +1,5 @@
 const test = require('tape')
-const { invert } = require('../HandleColors')
+const { invert } = require('../dist/HandleColors')
 
 test('Inverting colors', t => {
   t.deepEqual(invert({ r: 10, g: 10, b: 10 }, .1), { r: 245, g: 245, b: 245 }, `{ r: 10, g: 10, b: 10 } inverted`)

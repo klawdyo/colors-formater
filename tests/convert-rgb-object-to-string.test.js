@@ -1,5 +1,5 @@
 const test = require('tape')
-const { convertRGBObjectToString } = require('../HandleColors')
+const { convertRGBObjectToString } = require('../dist/HandleColors')
 
 test('Try to Convert RGB Object to String', t => {
 

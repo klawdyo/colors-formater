@@ -1,5 +1,5 @@
 const test = require('tape')
-const { lighten } = require('../HandleColors')
+const { lighten } = require('../dist/HandleColors')
 
 test('Lighting up colors', t => {
   t.deepEqual(lighten({ r: 10, g: 10, b: 10 }, .1), { r: 11, g: 11, b: 11 }, `{ r: 10, g: 10, b: 10 } illuminated in 10%`)

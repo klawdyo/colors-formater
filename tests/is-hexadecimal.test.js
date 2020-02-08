@@ -1,5 +1,5 @@
 const test = require('tape')
-const { isHexadecimal } = require('../HandleColors')
+const { isHexadecimal } = require('../dist/HandleColors')
 
 test('Is a VALID Hexadecimal Color', t => {
 

@@ -1,5 +1,5 @@
 const test = require('tape')
-const { hexToRgb } = require('../HandleColors')
+const { hexToRgb } = require('../dist/HandleColors')
 
 test('Try convert a VALID Hexadecimal Color to RGB', t => {
 

@@ -1,5 +1,5 @@
 const test = require('tape')
-const hc = require('../HandleColors')
+const hc = require('../dist/HandleColors')
 
 
 test('Convert HSL string to HSL object', t => {

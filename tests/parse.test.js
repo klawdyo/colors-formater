@@ -1,5 +1,5 @@
 const test = require('tape')
-const hc = require('../HandleColors')
+const hc = require('../dist/HandleColors')
 
 
 test('Parsing hexadecimal values', t => {

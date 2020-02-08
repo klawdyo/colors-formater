@@ -115,7 +115,7 @@ const isRGBObject = function (color) {
  * @return {Boolean}
  */
 const isRGBString = function (color) {
-  rgb = convertRGBStringToObject(color);
+  const rgb = convertRGBStringToObject(color);
   return !!rgb && isRGBObject(rgb)
 }
 

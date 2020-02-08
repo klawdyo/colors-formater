@@ -1,5 +1,5 @@
 const test = require('tape')
-const { isValid } = require('../HandleColors')
+const { isValid } = require('../dist/HandleColors')
 
 test('Is a Valid Color', t => {
 

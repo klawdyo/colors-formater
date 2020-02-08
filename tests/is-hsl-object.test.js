@@ -1,5 +1,5 @@
 const test = require('tape')
-const { isHSLObject } = require('../HandleColors')
+const { isHSLObject } = require('../dist/HandleColors')
 
 test('Is a HSL Object Color', t => {
 

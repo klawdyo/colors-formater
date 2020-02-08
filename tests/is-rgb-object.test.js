@@ -1,5 +1,5 @@
 const test = require('tape')
-const { isRGBObject } = require('../HandleColors')
+const { isRGBObject } = require('../dist/HandleColors')
 
 test('Is RGB Object', t => {
   t.deepEqual(isRGBObject({ r: 244, g: 23, b: 0 }), true, 'isRGBObject({r:244, g:23, b:0}) = true')
