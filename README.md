@@ -19,10 +19,10 @@ yarn add https://github.com/klawdyo/colors-formater
 
 ```git
 // NPM
-npm install --save https://github.com/klawdyo/colors-formater#v.0.5
+npm install --save https://github.com/klawdyo/colors-formater#v.0.6
 
 // Yarn
-yarn add https://github.com/klawdyo/colors-formater#v.0.5
+yarn add https://github.com/klawdyo/colors-formater#v.0.6
 
 ```
 
