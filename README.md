@@ -19,10 +19,10 @@ yarn add https://github.com/klawdyo/colors-formater
 
 ```git
 // NPM
-npm install --save https://github.com/klawdyo/colors-formater#v.0.3
+npm install --save https://github.com/klawdyo/colors-formater#v.0.5
 
 // Yarn
-yarn add https://github.com/klawdyo/colors-formater#v.0.3
+yarn add https://github.com/klawdyo/colors-formater#v.0.5
 
 ```
 
@@ -106,7 +106,7 @@ yarn add https://github.com/klawdyo/colors-formater#v.0.3
     color.isLight()       //false
 
     // Is a Dark color?
-    color.isDark()        //false
+    color.isDark()        //true
 ```
 
   ### Calculations
