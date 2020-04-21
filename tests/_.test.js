@@ -1,4 +1,3 @@
-
 require('./index.test')
 
 require('./parse.test')                                // ok

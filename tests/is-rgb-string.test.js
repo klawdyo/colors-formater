@@ -1,6 +1,9 @@
 const test = require('tape')
 const { isRGBString } = require('../dist/HandleColors')
 
+console.log(process.env);
+
+
 test('Is a RGB String Color', t => {
 
   tests = [
@@ -18,5 +21,10 @@ test('Is a RGB String Color', t => {
     t.equal(isRGBString(input), expected, msg)
   })
 
+  t.end()
+})
+
+test('Parameter is false', t => {
+  t.equal(isRGBString(null), false, 'isRGBString(null) is false')
   t.end()
 })

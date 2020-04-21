@@ -1,7 +1,7 @@
 {
   "name": "colors-formater",
   "description": "A project to handle colors in javascript",
-  "version": "0.0.1",
+  "version": "0.0.7",
   "main": "index.js",
   "repository": {
     "type": "git",

@@ -6,6 +6,11 @@ test('Is RGB Object', t => {
   t.end()
 })
 
+test('Color is null', t => {
+  t.deepEqual(isRGBObject(null), false, 'isRGBObject(null) = false')
+  t.end()
+})
+
 test('Is NOT a RGB Object', t => {
   const tests = [
     { r: 244, g: 23, ba: 0 },

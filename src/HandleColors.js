@@ -87,6 +87,7 @@ const parse = function (color) {
  * @return {Boolean}
  */
 const isRGBObject = function (color) {
+  if (!color) return false;
   return typeof color === 'object'
     && Object.keys(color).every(item => ['r', 'g', 'b'].includes(item))
     && color.r >= 0 && color.r <= 255
@@ -115,6 +116,7 @@ const isRGBObject = function (color) {
  * @return {Boolean}
  */
 const isRGBString = function (color) {
+  if (!color) return false;
   const rgb = convertRGBStringToObject(color);
   return !!rgb && isRGBObject(rgb)
 }
