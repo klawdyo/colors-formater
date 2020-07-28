@@ -59,7 +59,7 @@ yarn add https://github.com/klawdyo/colors-formater#v.0.6
   const color = Colors({ h: 255, s: '23%', l: '50%' })
 
   // Initialization with a HSL Sring
-  const color = Colors('255, 23%, 50% }')
+  const color = Colors('hsl(255, 23%, 50%)')
   ```
 
   ### Convertions
