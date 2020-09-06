@@ -8,10 +8,10 @@ A library to provide simple manipulation between colors formats in javascript
 
 ```git
 // NPM
-npm install --save https://github.com/klawdyo/colors-formater
+npm install --save colors-formater
 
 // Yarn
-yarn add https://github.com/klawdyo/colors-formater
+yarn add colors-formater
 
 ```
 
@@ -19,10 +19,10 @@ yarn add https://github.com/klawdyo/colors-formater
 
 ```git
 // NPM
-npm install --save https://github.com/klawdyo/colors-formater#v.0.6
+npm install --save colors-formater#v.0.6
 
 // Yarn
-yarn add https://github.com/klawdyo/colors-formater#v.0.6
+yarn add colors-formater#v.0.6
 
 ```
 
