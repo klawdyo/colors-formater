@@ -19,10 +19,10 @@ yarn add colors-formater
 
 ```git
 // NPM
-npm install --save colors-formater#v.0.6
+npm install --save colors-formater#v.0.8
 
 // Yarn
-yarn add colors-formater#v.0.6
+yarn add colors-formater#v.0.8
 
 ```
 
