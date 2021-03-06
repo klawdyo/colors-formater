@@ -305,7 +305,7 @@ const convertRGBStringToObject = function (color) {
  */
 const convertRGBObjectToString = function (color) {
   if (isRGBObject(color)) {
-    return `rgb(${color.g}, ${color.g}, ${color.b})`
+    return `rgb(${color.r}, ${color.g}, ${color.b})`
   }
 
   return null;
