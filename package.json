@@ -10,9 +10,9 @@
   "author": "Cláudio Medeiros (klawdyo)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/klawdyo/colors/issues"
+    "url": "https://github.com/klawdyo/colors-formater/issues"
   },
-  "homepage": "https://github.com/klawdyo/colors#readme",
+  "homepage": "https://github.com/klawdyo/colors-formater#readme",
   "scripts": {
     "test": "yarn build && cls && node tests/_.test | tap-spec",
     "build": "babel src -d dist"
