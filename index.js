@@ -1,37 +1,37 @@
 "use strict";
 
 /**
- * 
+ *
  * @example
  * // Init with hexa color
  * const color = Colors('123')
  * const color = Colors('#123')
- * const color = Colors('#ABCDEF') 
- * 
+ * const color = Colors('#ABCDEF')
+ *
  * // Init with RGB object
- * const color = Colors({ r:255, g:23, b: 467 }) 
- * 
+ * const color = Colors({ r:255, g:23, b: 467 })
+ *
  * // Init with RGB string
  * const color = Colors('rgb(23, 45, 67))
  * const color = Colors('rgba(23, 45, 67, 0.4))
- * 
+ *
  * // Init with HSL object
  * const color = Colors({ h:255, s:23, l: 467 })
- * 
+ *
  * //Conversions
  * color.toHex()
  * color.toHSL()
  * color.toRGB()
  * color.toRGBString()
  * color.toHSLString()
- * 
+ *
  * // Verifications
  * color.isHex()
  * color.isHSL()
  * color.isRGB()
  * color.isLight()
  * color.isDark()
- * 
+ *
  * // Calculations
  * // These functions changes internal initial color. Always prefer using
  * // the construtor Colors()
@@ -39,7 +39,7 @@
  * Colors(#A34).lighten(.35).toRGB()
  * Colors(#A34).inverted().toHSL()
  */
-var HandleColors = require('./dist/HandleColors');
+var HandleColors = require("./dist/HandleColors");
 
 function Colors(color) {
   var RGB = HandleColors.parse(color);
@@ -47,8 +47,17 @@ function Colors(color) {
     toHex: function toHex() {
       return HandleColors.rgbToHex(RGB);
     },
+    toHexa: function toHEXA(alpha) {
+      return HandleColors.rgbToHex(RGB) + HandleColors.alphaToHex(alpha);
+    },
     toRGB: function toRGB() {
       return RGB;
+    },
+    toRGBA: function toRGBA(alpha) {
+      return { ...RGB, a: alpha };
+    },
+    toRGBAString: function toRGBAString(alpha) {
+      return `rgba(${RGB.r}, ${RGB.g}, ${RGB.b}, ${alpha} )`;
     },
     toRGBString: function toRGBString() {
       return HandleColors.convertRGBObjectToString(RGB);
@@ -73,7 +82,7 @@ function Colors(color) {
     },
     isValid: function isValid() {
       return HandleColors.isValid(RGB);
-    }
+    },
   };
 }
 
